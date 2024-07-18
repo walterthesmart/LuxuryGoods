@@ -1,11 +1,7 @@
-
 ;; title: LuxuryNFT
 ;; version: 0.1.0
 ;; summary: An NFT contract for luxury items that can be minted on purchase of a luxury item
 ;; description: This NFT will act as a Loyalty signature for our customers who purchase luxury items. The NFT will be minted on the purchase of a luxury item and will be used to claim rewards and discounts on future purchases.
-
-;; traits
-(impl-trait 'ST31AT1T96E4CF8C2QZ7FCFC99WJCTV2GTTN3ZQKB.nft-approvable-trait.nft-approvable-trait)
 
 ;; token definitions
 (define-non-fungible-token luxurynfts uint)
@@ -14,7 +10,7 @@
 (define-constant token-name "LuxuryNFT")
 (define-constant token-symbol "LUXE")
 ;; full uri: https://graphigo.prd.galaxy.eco/metadata/{contract_hash}/{nft_id}.json
-(define-constant base-uri "https://graphigo.prd.galaxy.eco/metadata/SPYHQS4RFA4N87RDWNPEWYRYK3C6N2Q8S5CY3XG5.starnft/")
+(define-constant base-uri "")
 
 ;; errors
 (define-constant err-owner-only (err u100))
@@ -30,7 +26,7 @@
 ;;
 (define-data-var contract-owner principal tx-sender)
 ;; signer public key
-(define-data-var signer-public-key (buff 33) 0x036c572987e98f6244716c02ffa82a4aa244e3c8d965d6cac7079d98dcc2d78c32)
+(define-data-var signer-public-key (buff 33) 0x000000000000000000000000000000000000000000000000000000000000000000)
 (define-data-var last-token-id uint u0)
 ;; transferrable
 (define-data-var transferrable bool true)
@@ -46,16 +42,15 @@
 ;; nft cids<token-id, cid>
 (define-map nft-cids uint uint)
 
-
+;; public function
 (define-public (transfer (token-id uint) (owner principal) (recipient principal))
     (begin
         (asserts! (var-get transferrable) err-non-transferrable)
         (asserts! (and (is-owner token-id owner) (is-owner-or-approval token-id tx-sender)) err-not-token-owner)
         (clear-approval token-id)
-        (nft-transfer? starnfts token-id owner recipient)
+        (nft-transfer? luxurynfts token-id owner recipient)
     )
 )
-
 ;; sets an approval principal - allowed to call transfer on owner behalf.
 (define-public (set-approval-for (token-id uint) (approval principal))
     (begin
@@ -89,7 +84,7 @@
             ;; save last token id
             (var-set last-token-id token-id)
             ;; mint token
-            (try! (nft-mint? starnfts token-id owner))
+            (try! (nft-mint? luxurynfts token-id owner))
             (print {evt: "claim", token-id: token-id, cid: cid, verify-id: verify-id, cap: cap, owner: owner})
             (ok token-id)
         )
@@ -133,7 +128,7 @@
 
 (define-read-only (get-token-uri (token-id uint))
     (ok
-        (if (is-none (nft-get-owner? starnfts token-id))
+        (if (is-none (nft-get-owner? luxurynfts token-id))
             none
             (some (nft-uri token-id))
         )
@@ -153,7 +148,7 @@
 )
 
 (define-read-only (get-owner (token-id uint))
-    (ok (nft-get-owner? starnfts token-id))
+    (ok (nft-get-owner? luxurynfts token-id))
 )
 
 (define-read-only (get-approval (token-id uint))
@@ -188,7 +183,7 @@
 )
 
 (define-private (is-owner (token-id uint) (user principal))
-  (is-eq user (unwrap! (nft-get-owner? starnfts token-id) false))
+  (is-eq user (unwrap! (nft-get-owner? luxurynfts token-id) false))
 )
 
 (define-private (is-approval (token-id uint) (user principal))
