@@ -1,7 +1,3 @@
-Certainly! Here is a more detailed and comprehensive README file for your Luxury Goods smart contract project:
-
----
-
 # Luxury Goods Smart Contract
 
 The Luxury Goods smart contract is built on the Stacks blockchain using the Clarity language. This contract enables users to purchase luxury goods using STX or sBTC and receive NFTs as proof of purchase. The front end provides an interactive UI for browsing and buying luxury items.
