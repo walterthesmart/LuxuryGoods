@@ -1,26 +1,19 @@
 [project]
-name = 'LuxuryGoods'
-description = ''
+name = "LuxuryGoods"
 authors = []
+description = ""
 telemetry = true
-cache_dir = '.\.cache'
 requirements = []
-[contracts.LuxuryNFT]
-path = 'contracts/LuxuryNFT.clar'
-clarity_version = 2
-epoch = 2.5
+[contracts.Purchase]
+path = "contracts/Purchase.clar"
+depends_on = []
 
-[contracts.nft-approvable-trait]
-path = 'contracts/nft-approvable-trait.clar'
-clarity_version = 2
-epoch = 2.5
+[repl]
+costs_version = 2
+parser_version = 2
 
-[contracts.nft-trait]
-path = 'contracts/nft-trait.clar'
-clarity_version = 2
-epoch = 2.5
 [repl.analysis]
-passes = ['check_checker']
+passes = ["check_checker"]
 
 [repl.analysis.check_checker]
 strict = false
